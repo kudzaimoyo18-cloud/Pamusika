@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pamusika — Web</title>
+<link rel="stylesheet" href="../design/tokens.css">
+<link rel="stylesheet" href="../design/components.css">
+<style>
+  body { background: var(--bg); }
+  .web { max-width: 1280px; margin: 0 auto; }
+
+  /* top nav */
+  .navbar { position: sticky; top: 0; z-index: 40; display: flex; align-items: center; gap: 20px;
+    padding: 14px 32px; background: color-mix(in oklab, var(--bg) 88%, transparent); backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border-soft); }
+  .navbar .wordmark { font-size: 1.45rem; flex: none; }
+  .nav-search { flex: 1; max-width: 520px; display: flex; align-items: center; height: 46px; background: var(--surface);
+    border: 1px solid var(--border); border-radius: var(--r-md); overflow: hidden; }
+  .nav-search .q { flex: 1; display: flex; align-items: center; gap: 10px; padding: 0 14px; color: var(--text-dim); }
+  .nav-search .q i { color: var(--text-muted); width: 19px; }
+  .nav-search .loc { display: flex; align-items: center; gap: 6px; padding: 0 15px; height: 100%; border-left: 1px solid var(--border);
+    font-size: var(--fs-sm); font-weight: 600; } .nav-search .loc i { width: 15px; color: var(--green); }
+  .nav-right { display: flex; align-items: center; gap: 10px; flex: none; margin-left: auto; }
+  .nav-icon { width: 44px; height: 44px; border-radius: var(--r-sm); display: grid; place-items: center; color: var(--text); position: relative; }
+  .nav-icon i { width: 22px; } .nav-icon.has-dot::after { content:""; position:absolute; top:9px; right:10px; width:8px; height:8px; border-radius:50%; background:var(--green); border:2px solid var(--bg); }
+  .nav-ava { width: 40px; height: 40px; border-radius: 50%; background: var(--gold-soft); color: var(--gold);
+    display: grid; place-items: center; font-family: var(--font-serif); font-weight: 600; }
+
+  .view { display: none; } .view.on { display: block; }
+  .wrap { padding: 0 32px; }
+
+  /* HOME */
+  .hero { padding: 48px 0 30px; display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; }
+  .hero h1 { font-size: 3.4rem; font-weight: 400; letter-spacing: -0.025em; line-height: 1.02; max-width: 620px; }
+  .hero h1 em { font-style: italic; color: var(--green); }
+  .hero p { font-size: var(--fs-lg); color: var(--text-muted); margin-top: 16px; max-width: 460px; }
+  .hero .stat { text-align: right; flex: none; }
+  .hero .stat .n { font-family: var(--font-mono); font-size: 2.4rem; font-weight: 700; letter-spacing: -0.02em; }
+  .hero .stat .l { font-size: var(--fs-sm); color: var(--text-dim); }
+
+  .row-head { display: flex; align-items: baseline; justify-content: space-between; margin: 34px 0 16px; }
+  .row-head h2 { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 600; display: flex; align-items: center; gap: 9px; white-space: nowrap; }
+  .row-head h2 i { width: 19px; color: var(--gold); } .row-head a { color: var(--green); font-weight: 600; font-size: var(--fs-sm); }
+
+  .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .web .listing .ph { aspect-ratio: 4/3; }
+
+  .cat-strip { display: grid; grid-template-columns: repeat(7, 1fr); gap: 12px; margin-top: 6px; }
+  .cat-tile { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 20px 8px;
+    background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--r-md); }
+  .cat-tile .ci { width: 44px; height: 44px; border-radius: 13px; background: var(--surface-2); display: grid; place-items: center; }
+  .cat-tile .ci i { width: 24px; } .cat-tile span { font-size: var(--fs-sm); font-weight: 600; color: var(--text-muted); }
+
+  /* BROWSE (PLP) */
+  .plp { display: grid; grid-template-columns: 264px 1fr; gap: 28px; padding: 30px 0 60px; align-items: start; }
+  .filters { position: sticky; top: 84px; background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--r-lg); padding: 22px; }
+  .filters h3 { font-family: var(--font-ui); font-size: var(--fs-base); font-weight: 700; margin-bottom: 4px; }
+  .fgroup { padding: 18px 0; border-bottom: 1px solid var(--border-soft); } .fgroup:last-child { border-bottom: 0; padding-bottom: 0; }
+  .fgroup .ft { font-size: var(--fs-sm); font-weight: 700; color: var(--text-muted); margin-bottom: 12px; display: flex; justify-content: space-between; }
+  .fopt { display: flex; align-items: center; gap: 10px; padding: 7px 0; font-size: var(--fs-sm); color: var(--text-muted); }
+  .fopt .cb { width: 18px; height: 18px; border-radius: 5px; border: 1.5px solid var(--border); flex: none; display: grid; place-items: center; }
+  .fopt.on { color: var(--text); font-weight: 600; } .fopt.on .cb { background: var(--green); border-color: transparent; color: var(--green-ink); }
+  .fopt.on .cb i { width: 13px; } .fopt .c { margin-left: auto; font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--text-dim); }
+  .price-range { display: flex; gap: 8px; }
+  .price-range .input { height: 42px; }
+
+  .plp-main .bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  .plp-main .bar h1 { font-family: var(--font-serif); font-size: 1.8rem; font-weight: 600; }
+  .plp-main .bar .sub { font-size: var(--fs-sm); color: var(--text-muted); } .plp-main .bar .sub b { font-family: var(--font-mono); color: var(--text); }
+  .chips-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+  .plp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .plp-grid .ph { aspect-ratio: 4/3; }
+
+  /* LISTING */
+  .ld-web { display: grid; grid-template-columns: 1fr 380px; gap: 36px; padding: 24px 0 60px; align-items: start; }
+  .back-link { display: inline-flex; align-items: center; gap: 7px; color: var(--text-muted); font-size: var(--fs-sm); font-weight: 600; padding: 20px 0 10px; }
+  .back-link i { width: 16px; }
+  .gallery-web { position: relative; }
+  .gallery-web .main { aspect-ratio: 4/3; border-radius: var(--r-lg); overflow: hidden; position: relative; }
+  .gallery-web .main .badge-boost { position: absolute; top: 14px; left: 14px; z-index: 2; }
+  .gallery-web .thumbs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 10px; }
+  .gallery-web .thumbs .ph { aspect-ratio: 1; border-radius: var(--r-sm); cursor: pointer; }
+  .gallery-web .thumbs .ph.on { outline: 2px solid var(--green); outline-offset: 2px; }
+  .ld-desc-web { margin-top: 30px; }
+  .ld-desc-web h3 { font-family: var(--font-ui); font-size: var(--fs-base); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; }
+  .ld-desc-web p { color: var(--text-muted); line-height: 1.7; max-width: 620px; }
+  .specs-web { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border-soft);
+    border: 1px solid var(--border-soft); border-radius: var(--r-md); overflow: hidden; margin-top: 24px; max-width: 620px; }
+  .specs-web .spec { background: var(--surface); padding: 16px; }
+  .specs-web .k { font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-dim); font-weight: 600; }
+  .specs-web .v { font-family: var(--font-mono); font-weight: 600; margin-top: 5px; }
+
+  .buy-panel { position: sticky; top: 84px; background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--r-lg); padding: 24px; }
+  .buy-panel .price { font-family: var(--font-mono); font-weight: 700; font-size: 2rem; letter-spacing: -0.02em; }
+  .buy-panel .ti { font-family: var(--font-serif); font-size: 1.4rem; font-weight: 500; margin-top: 8px; line-height: 1.2; }
+  .buy-panel .meta { display: flex; gap: 14px; margin-top: 12px; font-size: var(--fs-sm); color: var(--text-muted); flex-wrap: wrap; }
+  .buy-panel .meta span { display: inline-flex; align-items: center; gap: 5px; } .buy-panel .meta i { width: 14px; color: var(--text-dim); }
+  .buy-panel .btn { margin-top: 18px; }
+  .shop-row { display: flex; align-items: center; gap: 12px; padding: 16px 0; margin-top: 18px; border-top: 1px solid var(--border-soft); }
+  .shop-row .avatar { width: 46px; height: 46px; background: var(--gold-soft); color: var(--gold); font-size: 1rem; }
+  .shop-row .nm { font-weight: 700; display: flex; align-items: center; gap: 5px; } .shop-row .nm .verified { width: 15px; color: var(--green); }
+  .shop-row .sub { font-size: var(--fs-xs); color: var(--text-muted); margin-top: 2px; }
+  .safety-web { display: flex; gap: 10px; padding: 13px; margin-top: 6px; background: var(--green-soft); border-radius: var(--r-md); }
+  .safety-web i { width: 19px; color: var(--green); flex: none; margin-top: 1px; } .safety-web p { font-size: var(--fs-xs); color: var(--text); line-height: 1.5; }
+  .report-web { text-align: center; margin-top: 16px; color: var(--text-dim); font-size: var(--fs-sm); font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 7px; }
+  .report-web i { width: 15px; }
+
+  @media (max-width: 1080px){ .grid-5 { grid-template-columns: repeat(3,1fr); } .grid-4 { grid-template-columns: repeat(2,1fr); } .plp-grid { grid-template-columns: repeat(2,1fr); } .ld-web { grid-template-columns: 1fr 340px; } .cat-strip { grid-template-columns: repeat(4,1fr); } .hero h1 { font-size: 2.6rem; } }
+  @media (max-width: 760px){ .plp { grid-template-columns: 1fr; } .filters { position: static; } .ld-web { grid-template-columns: 1fr; } .cat-strip { grid-template-columns: repeat(3,1fr); } .hero { flex-direction: column; align-items: flex-start; } .hero .stat { text-align: left; } }
+</style>
+</head>
+<body>
+<div class="controls" style="padding:14px 16px 0;justify-content:flex-end;max-width:1280px;margin:0 auto;">
+  <a class="ctrl-back" href="home.html"><i data-i="phoneframe"></i>Mobile screens</a>
+  <div class="ctrl-toggle" data-toggle="theme">
+    <button data-theme="dark"><i data-i="moon"></i>Dark</button>
+    <button data-theme="light"><i data-i="sun"></i>Light</button>
+  </div>
+</div>
+
+<div class="web">
+  <div class="navbar">
+    <span class="wordmark"><span class="mark"><svg viewBox="0 0 24 24"><circle class="ring" cx="12" cy="12" r="9" stroke-width="2.4"/><circle class="dot" cx="12" cy="12" r="3.4"/></svg></span><span class="w">pamusi<b>ka</b></span></span>
+    <div class="nav-search">
+      <span class="q"><i data-i="search"></i>Search 40,000+ listings</span>
+      <span class="loc"><i data-i="pin"></i>Harare</span>
+    </div>
+    <div class="nav-right">
+      <button class="btn btn-primary btn-sm" onclick="show('browse')" style="height:44px"><i data-i="plus"></i>Post a listing</button>
+      <button class="nav-icon"><i data-i="heart"></i></button>
+      <button class="nav-icon has-dot"><i data-i="chat"></i></button>
+      <button class="nav-ava">T</button>
+    </div>
+  </div>
+
+  <!-- ===== HOME ===== -->
+  <div class="view on" id="v-home" data-screen-label="Desktop Home">
+    <div class="wrap">
+      <div class="hero">
+        <div>
+          <div class="label-eyebrow" style="margin-bottom:16px">Zimbabwe’s marketplace</div>
+          <h1>Whatever you need — it’s <em>pamusika.</em></h1>
+          <p>Free to list, free to browse. Open a shop in 60 seconds and message buyers safely, in-app.</p>
+        </div>
+        <div class="stat"><div class="n">40k+</div><div class="l">live listings · 11 cities</div></div>
+      </div>
+
+      <div class="row-head"><h2><i data-i="boost"></i>Boosted today</h2><a href="#" onclick="show('browse');return false">See all</a></div>
+      <div class="grid-5" id="boostRow"></div>
+
+      <div class="row-head"><h2 style="color:var(--text)">Browse categories</h2><a href="#" onclick="show('browse');return false">All 17</a></div>
+      <div class="cat-strip" id="catStrip"></div>
+
+      <div class="row-head"><h2 style="color:var(--text)">Fresh in Harare</h2><a href="#" onclick="show('browse');return false">See all</a></div>
+      <div class="grid-4" id="freshGrid"></div>
+      <div style="height:60px"></div>
+    </div>
+  </div>
+
+  <!-- ===== BROWSE / PLP ===== -->
+  <div class="view" id="v-browse" data-screen-label="Desktop Vehicles PLP">
+    <div class="wrap">
+      <div class="plp">
+        <aside class="filters">
+          <h3>Filters</h3>
+          <div class="fgroup">
+            <div class="ft">Location</div>
+            <div class="fopt on"><span class="cb"><i data-i="check"></i></span>Harare<span class="c">842</span></div>
+            <div class="fopt"><span class="cb"></span>Bulawayo<span class="c">213</span></div>
+            <div class="fopt"><span class="cb"></span>Mutare<span class="c">96</span></div>
+          </div>
+          <div class="fgroup">
+            <div class="ft">Price (USD)</div>
+            <div class="price-range"><input class="input" placeholder="Min" value="2 000"><input class="input" placeholder="Max" value="6 000"></div>
+          </div>
+          <div class="fgroup">
+            <div class="ft">Make</div>
+            <div class="fopt on"><span class="cb"><i data-i="check"></i></span>Toyota<span class="c">389</span></div>
+            <div class="fopt"><span class="cb"></span>Honda<span class="c">176</span></div>
+            <div class="fopt"><span class="cb"></span>Mazda<span class="c">142</span></div>
+            <div class="fopt"><span class="cb"></span>Nissan<span class="c">118</span></div>
+          </div>
+          <div class="fgroup">
+            <div class="ft">Transmission</div>
+            <div class="fopt on"><span class="cb"><i data-i="check"></i></span>Automatic<span class="c">654</span></div>
+            <div class="fopt"><span class="cb"></span>Manual<span class="c">630</span></div>
+          </div>
+        </aside>
+        <div class="plp-main">
+          <div class="bar">
+            <div><h1>Vehicles</h1><div class="sub"><b>1 284</b> results in Harare</div></div>
+            <button class="btn btn-soft btn-sm"><i data-i="sort"></i>Boosted first</button>
+          </div>
+          <div class="chips-row">
+            <span class="chip" style="background:var(--green-soft);border-color:transparent;color:var(--green);font-weight:700"><i data-i="pin" style="width:13px"></i>Harare <i data-i="x" style="width:12px"></i></span>
+            <span class="chip">US$ 2k–6k <i data-i="x" style="width:12px"></i></span>
+            <span class="chip">Toyota <i data-i="x" style="width:12px"></i></span>
+            <span class="chip">Automatic <i data-i="x" style="width:12px"></i></span>
+          </div>
+          <div class="plp-grid" id="plpGrid"></div>
+          <div style="height:40px"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== LISTING ===== -->
+  <div class="view" id="v-listing" data-screen-label="Desktop Listing">
+    <div class="wrap">
+      <a class="back-link" href="#" onclick="show('browse');return false"><i data-i="cleft"></i>Back to Vehicles</a>
+      <div class="ld-web">
+        <div>
+          <div class="gallery-web">
+            <div class="main ph"><span class="badge badge-boost"><i data-i="boost" style="width:11px"></i>Boosted</span><span class="ph-tag">toyota wish · front 3/4</span></div>
+            <div class="thumbs">
+              <div class="ph on"><span class="ph-tag" style="font-size:8px;padding:2px">3/4</span></div>
+              <div class="ph"><span class="ph-tag" style="font-size:8px;padding:2px">interior</span></div>
+              <div class="ph"><span class="ph-tag" style="font-size:8px;padding:2px">rear</span></div>
+              <div class="ph"><span class="ph-tag" style="font-size:8px;padding:2px">engine</span></div>
+              <div class="ph"><span class="ph-tag" style="font-size:8px;padding:2px">+4</span></div>
+            </div>
+          </div>
+          <div class="ld-desc-web">
+            <h3>Description</h3>
+            <p>Clean Toyota Wish, mother’s car, full service history. Brand new tyres, working aircon, electric windows all round. Recently registered &amp; insured. No accidents. Price slightly negotiable to a serious buyer — message me here on Pamusika to view in Avondale.</p>
+            <div class="specs-web">
+              <div class="spec"><div class="k">Year</div><div class="v">2007</div></div>
+              <div class="spec"><div class="k">Mileage</div><div class="v">142k km</div></div>
+              <div class="spec"><div class="k">Fuel</div><div class="v">Petrol</div></div>
+              <div class="spec"><div class="k">Gearbox</div><div class="v">Auto</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="buy-panel">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
+            <div class="price">US$ 4&thinsp;500</div>
+            <span class="badge badge-expire"><i data-i="clock" style="width:11px"></i>3 days left</span>
+          </div>
+          <div class="ti">Toyota Wish 1.8, 2007</div>
+          <div class="meta"><span><i data-i="pin"></i>Avondale, Harare</span><span><i data-i="eye"></i>340 views</span></div>
+          <button class="btn btn-primary btn-lg btn-block"><i data-i="chat"></i>Message seller</button>
+          <button class="btn btn-soft btn-block" style="margin-top:10px"><i data-i="heart"></i>Save listing</button>
+          <a class="shop-row" href="shop.html">
+            <span class="avatar">M0</span>
+            <div style="flex:1"><div class="nm">M0 Boutique &amp; Motors <i data-i="verified" class="verified"></i></div><div class="sub">4.8 ★ · 62 listings · Avondale</div></div>
+            <i data-i="cright" style="width:18px;color:var(--text-dim)"></i>
+          </a>
+          <div class="safety-web"><i data-i="shield"></i><p>Meet in public, inspect before you pay, and never send a deposit before seeing the car. Pamusika never handles payments.</p></div>
+          <div class="report-web"><i data-i="flag"></i>Report this listing</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="../design/icons.js"></script>
+<script src="../design/shell.js"></script>
+<script>
+  function show(v){
+    document.querySelectorAll('.view').forEach(x=>x.classList.remove('on'));
+    document.getElementById('v-'+v).classList.add('on');
+    window.scrollTo(0,0);
+  }
+  // data
+  const boosts = [
+    ['US$ 4 500','Toyota Wish, 2007','Avondale','toyota wish · 07'],
+    ['US$ 6 200','Honda Fit hybrid','Borrowdale','honda fit · 12'],
+    ['US$ 14 500','Toyota Hilux D4D','Harare','hilux · 11'],
+    ['US$ 9 800','Mercedes C200','Harare','c200 · 08'],
+    ['US$ 5 100','VW Polo Vivo','Bulawayo','polo · 10'],
+  ];
+  const fresh = [
+    ['US$ 18','Floral midi dress','2h · Glen View','shein dress · M'],
+    ['US$ 95','4-plate gas stove','3h · Mbare','gas stove'],
+    ['US$ 230','Dell Latitude i5','5h · CBD','dell latitude'],
+    ['Free','Puppies, good home','6h · Chitungwiza','free · puppies'],
+  ];
+  const plp = [
+    ['US$ 4 500','Toyota Wish 1.8, 2007','Avondale · 142k km','toyota wish · 07', true],
+    ['US$ 6 200','Honda Fit, 2012 hybrid','Borrowdale · 98k km','honda fit · 12', true],
+    ['US$ 3 800','Mazda Demio, 2009','Mutare · 110k km','mazda demio · 09', false],
+    ['US$ 2 950','Nissan AD Van, 2008','Gweru · 160k km','nissan ad van', false],
+    ['US$ 14 500','Toyota Hilux D4D, 2011','Harare · 205k km','hilux · 11', false],
+    ['US$ 5 100','VW Polo Vivo, 2010','Bulawayo · 88k km','vw polo · 10', false],
+    ['US$ 9 800','Mercedes C200, 2008','Harare · 134k km','c200 · 08', false],
+    ['US$ 7 400','Isuzu KB250, 2009','Kwekwe · 178k km','isuzu kb', false],
+    ['US$ 4 200','Honda Fit, 2010','Harare · 121k km','honda fit · 10', false],
+  ];
+  const cats = [['car','Vehicles'],['home','Property'],['phoneframe','Phones'],['desktop','Electronics'],['tag','Fashion'],['settings','Services'],['user','Jobs']];
+
+  function card(d, boost){
+    return `<a class="listing" href="#" onclick="show('listing');return false">
+      ${boost?'<span class="badge badge-boost"><i data-i="boost" style="width:11px"></i>Boost</span>':''}
+      <button class="listing-fav" data-fav><i data-i="heart"></i></button>
+      <div class="ph"><span class="ph-tag">${d[3]}</span></div>
+      <div class="listing-body"><div class="listing-price"${d[0]==='Free'?' style="color:var(--green)"':''}>${d[0]}</div><div class="listing-title">${d[1]}</div><div class="listing-meta"><i data-i="pin" style="width:12px"></i>${d[2]}</div></div></a>`;
+  }
+  document.getElementById('boostRow').innerHTML = boosts.map(d=>card(d,true)).join('');
+  document.getElementById('freshGrid').innerHTML = fresh.map(d=>card(d,false)).join('');
+  document.getElementById('plpGrid').innerHTML = plp.map(d=>card(d,d[4])).join('');
+  document.getElementById('catStrip').innerHTML = cats.map(c=>`<a class="cat-tile" href="#" onclick="show('browse');return false"><span class="ci"><i data-i="${c[0]}"></i></span><span>${c[1]}</span></a>`).join('');
+  if(window.PamIcons) window.PamIcons.render();
+  document.querySelectorAll('[data-fav]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();}));
+</script>
+</body>
+</html>

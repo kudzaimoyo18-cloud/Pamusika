@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pamusika — Sign up</title>
+<link rel="stylesheet" href="../design/tokens.css">
+<link rel="stylesheet" href="../design/components.css">
+<style>
+  .auth { display: flex; flex-direction: column; height: 100%; }
+  .auth-top { padding: 8px 24px 0; }
+  .auth-top .wordmark { font-size: 1.3rem; }
+  .auth-body { flex: 1; padding: 28px 24px 0; display: flex; flex-direction: column; }
+  .auth h1 { font-family: var(--font-serif); font-size: 2rem; font-weight: 500; line-height: 1.1; letter-spacing: -0.02em; }
+  .auth h1 em { font-style: italic; color: var(--green); }
+  .auth .lede { font-size: var(--fs-base); color: var(--text-muted); margin-top: 12px; line-height: 1.55; max-width: 300px; }
+
+  .phone-field { display: flex; gap: 10px; margin-top: 28px; }
+  .cc { display: flex; align-items: center; gap: 8px; padding: 0 15px; height: 56px; flex: none;
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-md); font-weight: 700; }
+  .cc .flagdot { width: 22px; height: 16px; border-radius: 3px; overflow: hidden; display: flex; flex-direction: column; flex: none; }
+  .cc .flagdot span { flex: 1; }
+  .cc i { width: 14px; color: var(--text-dim); }
+  .phone-input { flex: 1; height: 56px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-md);
+    padding: 0 16px; font-family: var(--font-mono); font-size: 1.1rem; font-weight: 600; letter-spacing: 0.04em; }
+  .phone-input:focus { border-color: var(--green); outline: none; }
+
+  .wa-note { display: flex; align-items: center; gap: 9px; margin-top: 14px; font-size: var(--fs-sm); color: var(--text-muted); }
+  .wa-note i { width: 18px; color: var(--green); }
+
+  .auth-foot { padding: 0 24px 22px; }
+  .terms { font-size: var(--fs-xs); color: var(--text-dim); text-align: center; margin-top: 14px; line-height: 1.5; }
+  .terms a { color: var(--text-muted); text-decoration: underline; }
+  .switch-auth { text-align: center; font-size: var(--fs-sm); color: var(--text-muted); margin-top: 18px; }
+  .switch-auth a { color: var(--green); font-weight: 700; }
+
+  /* OTP step */
+  .otp-to { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-family: var(--font-mono);
+    font-size: var(--fs-sm); color: var(--text); }
+  .otp-to a { color: var(--green); font-weight: 600; font-family: var(--font-ui); }
+  .otp { margin-top: 30px; }
+  .resend { margin-top: 22px; font-size: var(--fs-sm); color: var(--text-dim); text-align: center; }
+  .resend b { color: var(--text-muted); font-family: var(--font-mono); }
+
+  /* numeric keypad */
+  .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border-soft);
+    border-top: 1px solid var(--border-soft); margin-top: auto; }
+  .key { background: var(--bg); height: 58px; display: grid; place-items: center; font-family: var(--font-mono);
+    font-size: 1.5rem; font-weight: 500; color: var(--text); }
+  .key.fn { font-size: 1rem; color: var(--text-muted); }
+  .key:active { background: var(--surface-2); }
+
+  .stepwrap { display: none; flex-direction: column; height: 100%; } .stepwrap.on { display: flex; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="controls">
+    <a class="ctrl-back" href="home.html"><i data-i="cleft"></i>Home</a>
+    <div class="ctrl-toggle" data-toggle="theme">
+      <button data-theme="dark"><i data-i="moon"></i>Dark</button>
+      <button data-theme="light"><i data-i="sun"></i>Light</button>
+    </div>
+  </div>
+
+  <div class="device" data-screen-label="Sign-up &amp; OTP">
+    <div class="app">
+      <div class="statusbar">
+        <span class="sb-time">9:41</span>
+        <span class="sb-right">
+          <svg width="18" height="13" viewBox="0 0 18 13" fill="currentColor"><rect x="0" y="8" width="3" height="5" rx="1"/><rect x="5" y="5" width="3" height="8" rx="1"/><rect x="10" y="2.5" width="3" height="10.5" rx="1"/><rect x="15" y="0" width="3" height="13" rx="1" opacity=".4"/></svg>
+          <i data-i="wifi" style="width:17px"></i>
+          <svg width="25" height="13" viewBox="0 0 25 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="3" stroke="currentColor" stroke-width="1.2" opacity=".5"/><rect x="3" y="3" width="13" height="7" rx="1.5" fill="currentColor"/><rect x="22.5" y="4.5" width="1.7" height="4" rx="1" fill="currentColor"/></svg>
+        </span>
+      </div>
+
+      <!-- ===== STEP 1: PHONE ===== -->
+      <div class="stepwrap on" id="step-phone">
+        <div class="auth">
+          <div class="auth-top">
+            <span class="wordmark"><span class="mark"><svg viewBox="0 0 24 24"><circle class="ring" cx="12" cy="12" r="9" stroke-width="2.4"/><circle class="dot" cx="12" cy="12" r="3.4"/></svg></span><span class="w">pamusi<b>ka</b></span></span>
+          </div>
+          <div class="auth-body">
+            <h1>Open your <em>market.</em></h1>
+            <p class="lede">Sign up with your phone number. We’ll send a 6-digit code to confirm it’s really you.</p>
+
+            <div class="phone-field">
+              <div class="cc">
+                <span class="flagdot"><span style="background:#0b9444"></span><span style="background:#fdd116"></span><span style="background:#d62828"></span><span style="background:#000"></span></span>
+                +263 <i data-i="cdown"></i>
+              </div>
+              <input class="phone-input" value="77 234 1190" inputmode="numeric">
+            </div>
+            <div class="wa-note"><i data-i="whatsapp"></i>Code sent on WhatsApp — works on a weak network too.</div>
+          </div>
+          <div class="auth-foot">
+            <button class="btn btn-primary btn-lg btn-block" onclick="go('otp')">Send my code<i data-i="arrowright"></i></button>
+            <p class="terms">By continuing you agree to Pamusika’s <a href="#">Terms</a> &amp; <a href="#">Community Rules</a>.</p>
+            <p class="switch-auth">Already selling here? <a href="#">Log in</a></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== STEP 2: OTP ===== -->
+      <div class="stepwrap" id="step-otp">
+        <div class="auth">
+          <div class="auth-top">
+            <button class="iconbtn" onclick="go('phone')" style="margin-left:-10px"><i data-i="cleft"></i></button>
+          </div>
+          <div class="auth-body">
+            <h1>Enter your code</h1>
+            <div class="otp-to">Sent to +263 77 234 1190 <a href="#" onclick="go('phone');return false">Edit</a></div>
+
+            <div class="otp" id="otpRow">
+              <div class="cell filled">4</div>
+              <div class="cell filled">1</div>
+              <div class="cell filled">9</div>
+              <div class="cell cursor">|</div>
+              <div class="cell"></div>
+              <div class="cell"></div>
+            </div>
+            <p class="resend">Didn’t get it? Resend in <b>0:42</b></p>
+          </div>
+
+          <!-- android numeric keypad -->
+          <div class="keypad">
+            <button class="key">1</button><button class="key">2</button><button class="key">3</button>
+            <button class="key">4</button><button class="key">5</button><button class="key">6</button>
+            <button class="key">7</button><button class="key">8</button><button class="key">9</button>
+            <button class="key fn">&nbsp;</button><button class="key">0</button><button class="key fn"><i data-i="cleft" style="width:20px"></i></button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="gesture"></div>
+  </div>
+</div>
+
+<script src="../design/icons.js"></script>
+<script src="../design/shell.js"></script>
+<script>
+  function go(step){
+    document.querySelectorAll('.stepwrap').forEach(s=>s.classList.remove('on'));
+    document.getElementById('step-'+step).classList.add('on');
+    if(window.PamIcons) window.PamIcons.render();
+  }
+</script>
+</body>
+</html>

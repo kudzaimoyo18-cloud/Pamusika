@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pamusika — Listing</title>
+<link rel="stylesheet" href="../design/tokens.css">
+<link rel="stylesheet" href="../design/components.css">
+<style>
+  .ld .screen { padding-bottom: 0; }
+  /* gallery */
+  .gallery { position: relative; }
+  .gallery-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; }
+  .gallery-track::-webkit-scrollbar { height: 0; } .gallery-track { scrollbar-width: none; }
+  .gallery-track .ph { width: 375px; flex: none; aspect-ratio: 1/1; scroll-snap-align: start; }
+  .g-scrim { position: absolute; top: 0; left: 0; right: 0; height: 120px; pointer-events: none;
+    background: linear-gradient(180deg, oklch(0.08 0.01 160 / 0.6), transparent); z-index: 1; }
+  .g-top { position: absolute; top: 12px; left: 12px; right: 12px; display: flex; align-items: center; z-index: 3; }
+  .g-btn { width: 40px; height: 40px; border-radius: 50%; background: var(--scrim); backdrop-filter: blur(8px);
+    display: grid; place-items: center; color: #fff; }
+  .g-btn i { width: 21px; }
+  .g-top .sp { flex: 1; }
+  .g-top .right { display: flex; gap: 8px; }
+  .g-badge { position: absolute; left: 14px; bottom: 56px; z-index: 3; box-shadow: var(--shadow-md); }
+  .g-count { position: absolute; right: 14px; bottom: 14px; z-index: 3; font-family: var(--font-mono);
+    font-size: var(--fs-xs); font-weight: 600; color: #fff; background: var(--scrim); backdrop-filter: blur(6px);
+    padding: 5px 9px; border-radius: var(--r-xs); }
+  .g-dots { position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%); display: flex; gap: 5px; z-index: 3; }
+  .g-dots span { width: 6px; height: 6px; border-radius: 50%; background: #fff; opacity: 0.4; }
+  .g-dots span.on { opacity: 1; width: 18px; border-radius: 3px; }
+
+  .detail-body { padding: 18px 16px 20px; }
+  .price-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .price-big { font-family: var(--font-mono); font-weight: 700; font-size: 1.9rem; letter-spacing: -0.02em; line-height: 1; }
+  .price-row .badge-expire { margin-top: 4px; }
+  .ld-title { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 500; margin-top: 12px; line-height: 1.15; }
+  .ld-meta { display: flex; align-items: center; gap: 14px; margin-top: 10px; font-size: var(--fs-sm); color: var(--text-muted); flex-wrap: wrap; }
+  .ld-meta span { display: inline-flex; align-items: center; gap: 5px; }
+  .ld-meta i { width: 14px; color: var(--text-dim); }
+
+  .specs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border-soft);
+    border: 1px solid var(--border-soft); border-radius: var(--r-md); overflow: hidden; margin-top: 18px; }
+  .spec { background: var(--surface); padding: 13px 8px; text-align: center; }
+  .spec .k { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-dim); font-weight: 600; }
+  .spec .v { font-family: var(--font-mono); font-size: var(--fs-sm); font-weight: 600; margin-top: 4px; }
+
+  .ld-desc { margin-top: 22px; font-size: var(--fs-base); color: var(--text-muted); line-height: 1.65; }
+  .ld-desc h4 { font-family: var(--font-ui); font-size: var(--fs-sm); font-weight: 700; color: var(--text); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+
+  .shop-card { display: flex; align-items: center; gap: 13px; padding: 15px; margin-top: 22px;
+    background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--r-md); }
+  .shop-card .avatar { width: 48px; height: 48px; font-size: 1.1rem; background: var(--gold-soft); color: var(--gold); }
+  .shop-card .nm { font-weight: 700; display: flex; align-items: center; gap: 5px; }
+  .shop-card .nm .verified { width: 16px; }
+  .shop-card .sub { font-size: var(--fs-xs); color: var(--text-muted); margin-top: 2px; display: flex; align-items: center; gap: 8px; }
+  .shop-card .sub .star { color: var(--gold); display: inline-flex; align-items: center; gap: 3px; }
+  .shop-card .sub .star i { width: 12px; }
+
+  .safety { display: flex; gap: 11px; padding: 14px; margin-top: 16px; background: var(--green-soft);
+    border-radius: var(--r-md); }
+  .safety i { width: 20px; color: var(--green); flex: none; margin-top: 1px; }
+  .safety p { font-size: var(--fs-sm); color: var(--text); line-height: 1.5; }
+  .safety p b { font-weight: 700; }
+
+  .report-row { display: flex; align-items: center; justify-content: center; gap: 7px; margin-top: 18px;
+    color: var(--text-dim); font-size: var(--fs-sm); font-weight: 600; }
+  .report-row i { width: 15px; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="controls">
+    <a class="ctrl-back" href="vehicles.html"><i data-i="cleft"></i>Vehicles</a>
+    <div class="ctrl-toggle" data-toggle="theme">
+      <button data-theme="dark"><i data-i="moon"></i>Dark</button>
+      <button data-theme="light"><i data-i="sun"></i>Light</button>
+    </div>
+  </div>
+
+  <div class="device ld" data-screen-label="Listing detail">
+    <div class="app">
+      <div class="statusbar on-photo">
+        <span class="sb-time">9:41</span>
+        <span class="sb-right">
+          <svg width="18" height="13" viewBox="0 0 18 13" fill="currentColor"><rect x="0" y="8" width="3" height="5" rx="1"/><rect x="5" y="5" width="3" height="8" rx="1"/><rect x="10" y="2.5" width="3" height="10.5" rx="1"/><rect x="15" y="0" width="3" height="13" rx="1" opacity=".4"/></svg>
+          <i data-i="wifi" style="width:17px"></i>
+          <svg width="25" height="13" viewBox="0 0 25 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="3" stroke="currentColor" stroke-width="1.2" opacity=".5"/><rect x="3" y="3" width="13" height="7" rx="1.5" fill="currentColor"/><rect x="22.5" y="4.5" width="1.7" height="4" rx="1" fill="currentColor"/></svg>
+        </span>
+      </div>
+
+      <div class="screen">
+        <div class="gallery">
+          <div class="g-scrim"></div>
+          <div class="g-top">
+            <a class="g-btn" href="vehicles.html"><i data-i="cleft"></i></a>
+            <span class="sp"></span>
+            <span class="right">
+              <button class="g-btn"><i data-i="share"></i></button>
+              <button class="g-btn" data-fav><i data-i="heart"></i></button>
+            </span>
+          </div>
+          <div class="gallery-track">
+            <div class="ph"><span class="ph-tag">toyota wish · front 3/4</span></div>
+            <div class="ph"><span class="ph-tag">interior · dashboard</span></div>
+            <div class="ph"><span class="ph-tag">rear · boot open</span></div>
+            <div class="ph"><span class="ph-tag">engine bay</span></div>
+          </div>
+          <span class="badge badge-boost g-badge"><i data-i="boost" style="width:11px"></i>Boosted</span>
+          <span class="g-count">1 / 8</span>
+          <div class="g-dots"><span class="on"></span><span></span><span></span><span></span></div>
+        </div>
+
+        <div class="detail-body">
+          <div class="price-row">
+            <div>
+              <div class="price-big">US$ 4&thinsp;500</div>
+              <div class="ld-title">Toyota Wish 1.8, 2007</div>
+            </div>
+            <span class="badge badge-expire"><i data-i="clock" style="width:11px"></i>3 days left</span>
+          </div>
+
+          <div class="ld-meta">
+            <span><i data-i="pin"></i>Avondale, Harare</span>
+            <span><i data-i="clock"></i>Posted 2 days ago</span>
+            <span><i data-i="eye"></i>340 views</span>
+          </div>
+
+          <div class="specs">
+            <div class="spec"><div class="k">Year</div><div class="v">2007</div></div>
+            <div class="spec"><div class="k">Mileage</div><div class="v">142k</div></div>
+            <div class="spec"><div class="k">Fuel</div><div class="v">Petrol</div></div>
+            <div class="spec"><div class="k">Gearbox</div><div class="v">Auto</div></div>
+          </div>
+
+          <div class="ld-desc">
+            <h4>Description</h4>
+            <p>Clean Toyota Wish, mother’s car, full service history. Brand new tyres, working aircon, electric windows all round. Recently registered &amp; insured. No accidents. Price slightly negotiable to a serious buyer — message me here on Pamusika to view in Avondale.</p>
+          </div>
+
+          <a class="shop-card" href="shop.html">
+            <span class="avatar">M0</span>
+            <div style="flex:1">
+              <div class="nm">M0 Boutique &amp; Motors <i data-i="verified" class="verified"></i></div>
+              <div class="sub"><span class="star"><i data-i="starfill"></i>4.8</span><span>·</span><span>62 listings</span><span>·</span><span>Avondale</span></div>
+            </div>
+            <i data-i="cright" style="width:18px;color:var(--text-dim)"></i>
+          </a>
+
+          <div class="safety">
+            <i data-i="shield"></i>
+            <p><b>Stay safe.</b> Meet in a public place, inspect before you pay, and never send a deposit before seeing the car. Pamusika never handles payments.</p>
+          </div>
+
+          <div class="report-row"><i data-i="flag"></i>Report this listing</div>
+        </div>
+      </div>
+
+      <div class="action-bar">
+        <button class="btn btn-icon btn-soft" data-fav style="width:52px;height:52px"><i data-i="heart"></i></button>
+        <button class="btn btn-primary btn-lg btn-block"><i data-i="chat"></i>Message seller</button>
+      </div>
+    </div>
+    <div class="gesture"></div>
+  </div>
+</div>
+
+<script src="../design/icons.js"></script>
+<script src="../design/shell.js"></script>
+</body>
+</html>

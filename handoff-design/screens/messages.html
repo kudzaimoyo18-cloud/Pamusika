@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pamusika — Messages</title>
+<link rel="stylesheet" href="../design/tokens.css">
+<link rel="stylesheet" href="../design/components.css">
+<style>
+  /* ---- list ---- */
+  .msg-seg { padding: 2px 16px 12px; }
+  .conv { display: flex; align-items: center; gap: 12px; padding: 13px 16px; position: relative; }
+  .conv + .conv { border-top: 1px solid var(--border-soft); }
+  .conv .avatar { width: 50px; height: 50px; font-size: 1.05rem; flex: none; }
+  .conv.a-store .avatar { background: var(--gold-soft); color: var(--gold); }
+  .conv.a-user .avatar { background: var(--green-soft); color: var(--green); }
+  .conv .mid { flex: 1; min-width: 0; }
+  .conv .top { display: flex; align-items: center; gap: 6px; }
+  .conv .nm { font-weight: 700; font-size: var(--fs-base); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .conv .nm .verified { width: 14px; color: var(--green); flex: none; }
+  .conv .tm { margin-left: auto; font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--text-dim); flex: none; }
+  .conv .prev { font-size: var(--fs-sm); color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 3px; }
+  .conv.unread .prev { color: var(--text); font-weight: 600; }
+  .conv .ph { width: 44px; height: 44px; border-radius: 8px; flex: none; }
+  .conv .dot { position: absolute; left: 51px; top: 13px; width: 20px; height: 20px; border-radius: 50%;
+    background: var(--green); color: var(--green-ink); font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+    display: grid; place-items: center; border: 2px solid var(--bg); }
+
+  /* ---- thread ---- */
+  .thread-head { display: flex; align-items: center; gap: 10px; padding: 6px 12px 12px; }
+  .thread-head .avatar { width: 38px; height: 38px; font-size: .85rem; background: var(--gold-soft); color: var(--gold); }
+  .thread-head .nm { font-weight: 700; display: flex; align-items: center; gap: 5px; font-size: var(--fs-base); }
+  .thread-head .nm .verified { width: 14px; color: var(--green); }
+  .thread-head .st { font-size: var(--fs-xs); color: var(--green); }
+  .ctx { display: flex; align-items: center; gap: 11px; margin: 0 12px 8px; padding: 9px 11px;
+    background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--r-sm); }
+  .ctx .ph { width: 40px; height: 40px; border-radius: 7px; flex: none; }
+  .ctx .ti { flex: 1; min-width: 0; } .ctx .ti .t { font-size: var(--fs-sm); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ctx .ti .p { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--green); margin-top: 2px; }
+  .ctx .view { font-size: var(--fs-sm); color: var(--green); font-weight: 600; flex: none; }
+
+  .bubbles { padding: 6px 14px 14px; display: flex; flex-direction: column; gap: 8px; }
+  .day { text-align: center; font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--text-dim); margin: 8px 0; text-transform: uppercase; letter-spacing: 0.05em; }
+  .bub { max-width: 78%; padding: 10px 13px; border-radius: 16px; font-size: var(--fs-base); line-height: 1.4; }
+  .bub .t { font-family: var(--font-mono); font-size: 10px; opacity: 0.6; margin-top: 4px; text-align: right; }
+  .bub.in { align-self: flex-start; background: var(--surface-2); border-bottom-left-radius: 5px; }
+  .bub.out { align-self: flex-end; background: var(--green); color: var(--green-ink); border-bottom-right-radius: 5px; }
+  .bub.out .t { opacity: 0.7; }
+  .sys { align-self: center; max-width: 86%; text-align: center; font-size: var(--fs-xs); color: var(--text-muted);
+    background: var(--green-soft); padding: 9px 13px; border-radius: var(--r-sm); line-height: 1.45; }
+  .sys b { color: var(--text); }
+
+  .composer { display: flex; align-items: center; gap: 9px; padding: 10px 14px; }
+  .composer .plus { width: 42px; height: 42px; border-radius: 50%; background: var(--surface-2); display: grid; place-items: center; color: var(--text); flex: none; }
+  .composer .plus i { width: 22px; }
+  .composer .box { flex: 1; height: 44px; background: var(--surface); border: 1px solid var(--border); border-radius: 999px;
+    display: flex; align-items: center; padding: 0 16px; color: var(--text-dim); font-size: var(--fs-base); }
+  .composer .send { width: 44px; height: 44px; border-radius: 50%; background: var(--green); color: var(--green-ink); display: grid; place-items: center; flex: none; }
+  .composer .send i { width: 22px; }
+
+  .view-list .thread-view, .view-thread .list-view { display: none; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="controls">
+    <a class="ctrl-back" href="home.html"><i data-i="cleft"></i>Home</a>
+    <div class="ctrl-toggle" data-toggle="theme">
+      <button data-theme="dark"><i data-i="moon"></i>Dark</button>
+      <button data-theme="light"><i data-i="sun"></i>Light</button>
+    </div>
+  </div>
+
+  <div class="device view-list" id="msgDevice" data-screen-label="Messages">
+    <div class="app">
+      <div class="statusbar">
+        <span class="sb-time">9:41</span>
+        <span class="sb-right">
+          <svg width="18" height="13" viewBox="0 0 18 13" fill="currentColor"><rect x="0" y="8" width="3" height="5" rx="1"/><rect x="5" y="5" width="3" height="8" rx="1"/><rect x="10" y="2.5" width="3" height="10.5" rx="1"/><rect x="15" y="0" width="3" height="13" rx="1" opacity=".4"/></svg>
+          <i data-i="wifi" style="width:17px"></i>
+          <svg width="25" height="13" viewBox="0 0 25 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="3" stroke="currentColor" stroke-width="1.2" opacity=".5"/><rect x="3" y="3" width="13" height="7" rx="1.5" fill="currentColor"/><rect x="22.5" y="4.5" width="1.7" height="4" rx="1" fill="currentColor"/></svg>
+        </span>
+      </div>
+
+      <!-- ============ LIST ============ -->
+      <div class="list-view">
+        <div class="appbar">
+          <span class="appbar-title">Messages</span>
+          <span class="appbar-spacer"></span>
+          <button class="iconbtn"><i data-i="search"></i></button>
+        </div>
+        <div class="msg-seg">
+          <div class="seg" data-group style="width:100%"><button class="active" data-item style="flex:1">All</button><button data-item style="flex:1">Buying</button><button data-item style="flex:1">Selling</button></div>
+        </div>
+
+        <div class="screen">
+          <div class="conv a-store unread" onclick="openThread()">
+            <span class="avatar">M0</span>
+            <div class="mid">
+              <div class="top"><span class="nm">M0 Boutique</span><i data-i="verified" class="verified"></i><span class="tm">9:32</span></div>
+              <div class="prev">Yes still available 😊 when can you come?</div>
+            </div>
+            <div class="ph"><span class="ph-tag" style="font-size:8px;padding:2px">dress</span></div>
+            <span class="dot">2</span>
+          </div>
+          <div class="conv a-user" onclick="openThread()">
+            <span class="avatar">TM</span>
+            <div class="mid">
+              <div class="top"><span class="nm">Tatenda M.</span><span class="tm">8:14</span></div>
+              <div class="prev">You: Ok sharp, I’ll take it. Meet at...</div>
+            </div>
+            <div class="ph"><span class="ph-tag" style="font-size:8px;padding:2px">wish</span></div>
+          </div>
+          <div class="conv a-user" onclick="openThread()">
+            <span class="avatar">RK</span>
+            <div class="mid">
+              <div class="top"><span class="nm">Rumbi K.</span><span class="tm">Yest</span></div>
+              <div class="prev">Is the price negotiable?</div>
+            </div>
+            <div class="ph"><span class="ph-tag" style="font-size:8px;padding:2px">laptop</span></div>
+          </div>
+          <div class="conv a-store" onclick="openThread()">
+            <span class="avatar">AG</span>
+            <div class="mid">
+              <div class="top"><span class="nm">Avondale Motors</span><i data-i="verified" class="verified"></i><span class="tm">Mon</span></div>
+              <div class="prev">You: Thanks, will think about it</div>
+            </div>
+            <div class="ph"><span class="ph-tag" style="font-size:8px;padding:2px">hilux</span></div>
+          </div>
+          <div class="conv a-user" onclick="openThread()">
+            <span class="avatar">PC</span>
+            <div class="mid">
+              <div class="top"><span class="nm">Prince C.</span><span class="tm">Mon</span></div>
+              <div class="prev">Sold already, sorry 🙏</div>
+            </div>
+            <div class="ph"><span class="ph-tag" style="font-size:8px;padding:2px">stove</span></div>
+          </div>
+          <div style="height:20px"></div>
+        </div>
+
+        <nav class="tabbar">
+          <a class="tab" href="home.html"><i data-i="home"></i><span>Home</span></a>
+          <a class="tab" href="vehicles.html"><i data-i="search"></i><span>Browse</span></a>
+          <a class="tab sell" href="sell.html"><span class="tab-sell-btn"><i data-i="plus"></i></span><span>Sell</span></a>
+          <a class="tab active"><i data-i="chat"></i><span>Messages</span></a>
+          <a class="tab" href="shop.html"><i data-i="user"></i><span>Account</span></a>
+        </nav>
+      </div>
+
+      <!-- ============ THREAD ============ -->
+      <div class="thread-view">
+        <div class="thread-head">
+          <button class="iconbtn" onclick="closeThread()" style="margin-left:-6px"><i data-i="cleft"></i></button>
+          <span class="avatar">M0</span>
+          <div style="flex:1">
+            <div class="nm">M0 Boutique <i data-i="verified" class="verified"></i></div>
+            <div class="st">Active now</div>
+          </div>
+          <button class="iconbtn"><i data-i="dots"></i></button>
+        </div>
+        <div class="ctx">
+          <div class="ph"></div>
+          <div class="ti"><div class="t">Satin slip dress, emerald</div><div class="p">US$ 35</div></div>
+          <a class="view" href="listing.html">View</a>
+        </div>
+
+        <div class="screen">
+          <div class="bubbles">
+            <div class="day">Today</div>
+            <div class="sys"><b>You’re messaging on Pamusika.</b> Keep the chat here — never pay before you collect.</div>
+            <div class="bub out">Hi, is the emerald slip dress still available? Size M?<div class="t">9:20</div></div>
+            <div class="bub in">Yes still available 😊 size M in stock<div class="t">9:28</div></div>
+            <div class="bub in">It’s US$35, fits a 10–12<div class="t">9:28</div></div>
+            <div class="bub out">Perfect. Can I collect in Avondale today?<div class="t">9:30</div></div>
+            <div class="bub in">Yes 😊 when can you come? I’m here till 5<div class="t">9:32</div></div>
+          </div>
+        </div>
+
+        <div class="composer">
+          <button class="plus"><i data-i="plus"></i></button>
+          <div class="box">Message…</div>
+          <button class="send"><i data-i="send"></i></button>
+        </div>
+      </div>
+
+    </div>
+    <div class="gesture"></div>
+  </div>
+</div>
+
+<script src="../design/icons.js"></script>
+<script src="../design/shell.js"></script>
+<script>
+  const dev = document.getElementById('msgDevice');
+  function openThread(){ dev.classList.remove('view-list'); dev.classList.add('view-thread'); }
+  function closeThread(){ dev.classList.remove('view-thread'); dev.classList.add('view-list'); }
+</script>
+</body>
+</html>

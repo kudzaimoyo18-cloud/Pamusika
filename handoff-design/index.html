@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pamusika</title>
+<link rel="stylesheet" href="design/tokens.css">
+<link rel="stylesheet" href="design/components.css">
+<style>
+  body { background: radial-gradient(120% 70% at 50% -10%, var(--bg-elev), var(--bg) 55%); min-height: 100vh; }
+  .hub { max-width: 1180px; margin: 0 auto; padding: 0 28px 100px; }
+
+  .hub-top { display: flex; align-items: center; padding: 22px 0 0; }
+  .hub-top .wordmark { font-size: 1.5rem; }
+  .hub-top .sp { flex: 1; }
+
+  .cover { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 50px; align-items: center; padding: 60px 0 50px; }
+  @media (max-width: 880px){ .cover { grid-template-columns: 1fr; gap: 36px; } }
+  .cover .label-eyebrow { margin-bottom: 22px; }
+  .cover h1 { font-size: clamp(2.8rem, 6vw, 4.4rem); font-weight: 400; letter-spacing: -0.025em; line-height: 1.0; }
+  .cover h1 em { font-style: italic; color: var(--green); }
+  .cover p { font-size: var(--fs-lg); color: var(--text-muted); margin-top: 24px; max-width: 480px; line-height: 1.6; }
+  .cover .meta { display: flex; gap: 26px; margin-top: 28px; }
+  .cover .meta .m .n { font-family: var(--font-mono); font-size: 1.4rem; font-weight: 700; }
+  .cover .meta .m .l { font-size: var(--fs-xs); color: var(--text-dim); margin-top: 2px; }
+  .cover .cta { display: flex; gap: 12px; margin-top: 32px; flex-wrap: wrap; }
+
+  /* phone in cover */
+  .cover-phone { justify-self: center; position: relative; }
+  .mini-device { width: 280px; flex: none; border-radius: 40px; border: 10px solid oklch(0.1 0.004 162);
+    background: var(--bg); overflow: hidden; box-shadow: var(--shadow-lg); position: relative; }
+  [data-theme="light"] .mini-device { border-color: oklch(0.2 0.006 162); }
+  .md-status { height: 34px; display: flex; align-items: center; justify-content: space-between; padding: 0 18px 0 20px;
+    font-weight: 700; font-size: 11px; }
+  .md-status .dots { display: flex; gap: 4px; align-items: center; } .md-status .dots b { width: 4px; height: 4px; border-radius: 50%; background: var(--text); display: block; }
+  .md-bar { display: flex; align-items: center; padding: 4px 16px 10px; }
+  .md-bar .wordmark { font-size: 1rem; } .md-bar .sp { flex: 1; }
+  .md-bar .ic { width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; color: var(--text); } .md-bar .ic i { width: 17px; }
+  .md-body { padding: 2px 16px 0; }
+  .md-eyebrow { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); }
+  .md-body h3 { font-family: var(--font-serif); font-size: 1.25rem; font-weight: 500; line-height: 1.08; margin-top: 7px; letter-spacing: -0.01em; }
+  .md-body h3 em { font-style: italic; color: var(--green); }
+  .md-search { display: flex; align-items: center; height: 38px; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 11px; margin-top: 13px; overflow: hidden; font-size: 11px; }
+  .md-search .q { flex: 1; display: flex; align-items: center; gap: 7px; padding: 0 11px; color: var(--text-dim); } .md-search .q i { width: 14px; color: var(--text-muted); }
+  .md-search .loc { display: flex; align-items: center; gap: 4px; padding: 0 11px; height: 100%; border-left: 1px solid var(--border); font-weight: 600; } .md-search .loc i { width: 12px; color: var(--green); }
+  .md-shead { display: flex; align-items: center; gap: 6px; margin: 16px 0 9px; font-family: var(--font-serif); font-size: .95rem; font-weight: 600; }
+  .md-shead i { width: 13px; color: var(--gold); } .md-shead .sp { flex: 1; } .md-shead a { font-size: 10px; color: var(--green); font-weight: 600; font-family: var(--font-ui); }
+  .md-rail { display: flex; gap: 10px; }
+  .md-card { flex: 1; background: var(--surface); border: 1px solid var(--border-soft); border-radius: 11px; overflow: hidden; position: relative; }
+  .md-card .badge { position: absolute; top: 6px; left: 6px; font-size: 7px; padding: 2px 5px; z-index: 1; }
+  .md-card .img { aspect-ratio: 4/3; }
+  .md-card .cb { padding: 7px 8px 9px; } .md-card .pr { font-family: var(--font-mono); font-weight: 700; font-size: 13px; letter-spacing: -.02em; }
+  .md-card .ti { font-size: 9px; color: var(--text-muted); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .md-cats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; margin-top: 6px; }
+  .md-cat { display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 9px 2px; background: var(--surface); border: 1px solid var(--border-soft); border-radius: 11px; }
+  .md-cat .cc { width: 28px; height: 28px; border-radius: 9px; background: var(--surface-2); display: grid; place-items: center; } .md-cat .cc i { width: 16px; }
+  .md-cat.more .cc { background: var(--green-soft); color: var(--green); }
+  .md-cat span { font-size: 8px; font-weight: 600; color: var(--text-muted); }
+  .md-fade { height: 26px; background: linear-gradient(transparent, var(--bg)); }
+
+  .sec-title { display: flex; align-items: baseline; gap: 14px; border-top: 1px solid var(--border-soft); padding-top: 26px; margin-top: 30px; }
+  .sec-title h2 { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 600; white-space: nowrap; }
+  .sec-title span { font-family: var(--font-mono); font-size: var(--fs-sm); color: var(--text-dim); }
+
+  .screens { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 22px; }
+  @media (max-width: 880px){ .screens { grid-template-columns: repeat(2, 1fr); } }
+  .scard { display: flex; flex-direction: column; gap: 12px; }
+  .scard .thumb { aspect-ratio: 9/16; border-radius: var(--r-md); border: 1px solid var(--border); overflow: hidden;
+    display: flex; flex-direction: column; background: var(--surface); transition: border-color .15s, transform .16s var(--ease); }
+  .scard:hover .thumb { border-color: var(--green); transform: translateY(-4px); }
+  .scard .cap b { font-size: var(--fs-sm); font-weight: 700; display: flex; align-items: center; gap: 6px; }
+  .scard .cap b .num { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--green); }
+  .scard .cap p { font-size: var(--fs-xs); color: var(--text-dim); font-family: var(--font-mono); margin-top: 3px; }
+
+  .big-links { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 22px; }
+  @media (max-width: 880px){ .big-links { grid-template-columns: 1fr; } }
+  .blink { display: flex; align-items: center; gap: 18px; padding: 24px; background: var(--surface);
+    border: 1px solid var(--border-soft); border-radius: var(--r-lg); transition: border-color .15s, transform .16s var(--ease); }
+  .blink:hover { border-color: var(--green); transform: translateY(-3px); }
+  .blink .ic { width: 54px; height: 54px; border-radius: 16px; display: grid; place-items: center; flex: none; }
+  .blink.ds .ic { background: var(--green-soft); color: var(--green); } .blink.web .ic { background: var(--gold-soft); color: var(--gold); }
+  .blink .ic i { width: 28px; }
+  .blink h3 { font-family: var(--font-serif); font-size: 1.25rem; font-weight: 600; }
+  .blink p { font-size: var(--fs-sm); color: var(--text-muted); margin-top: 3px; }
+  .blink .go { margin-left: auto; color: var(--text-dim); } .blink .go i { width: 20px; }
+
+  .hub-foot { text-align: center; margin-top: 60px; font-size: var(--fs-sm); color: var(--text-dim); }
+</style>
+</head>
+<body>
+<div class="hub">
+  <div class="hub-top">
+    <span class="wordmark"><span class="mark"><svg viewBox="0 0 24 24"><circle class="ring" cx="12" cy="12" r="9" stroke-width="2.4"/><circle class="dot" cx="12" cy="12" r="3.4"/></svg></span><span class="w">pamusi<b>ka</b></span></span>
+    <span class="sp"></span>
+    <div class="ctrl-toggle" data-toggle="theme">
+      <button data-theme="dark"><i data-i="moon"></i>Dark</button>
+      <button data-theme="light"><i data-i="sun"></i>Light</button>
+    </div>
+  </div>
+
+  <div class="cover">
+    <div>
+      <div class="label-eyebrow">Brand &amp; product system · Zimbabwe</div>
+      <h1>The marketplace<br>that speaks <em>Shona.</em></h1>
+      <p>Pamusika — “at the market.” A free, mobile-first place to open a shop and sell anything, built to feel safer than a Facebook DM and lighter than a 4G budget.</p>
+      <div class="meta">
+        <div class="m"><div class="n">17</div><div class="l">categories</div></div>
+        <div class="m"><div class="n">11</div><div class="l">cities</div></div>
+        <div class="m"><div class="n">$0</div><div class="l">to list, ever</div></div>
+      </div>
+      <div class="cta">
+        <a class="btn btn-primary btn-lg" href="design/index.html">Open the design system</a>
+        <a class="btn btn-lg" href="screens/home.html">Browse the app</a>
+      </div>
+    </div>
+    <div class="cover-phone">
+      <div class="mini-device">
+        <div class="md-status">
+          <span class="sb-time">9:41</span>
+          <span class="dots"><i data-i="wifi" style="width:13px"></i><b></b><b></b></span>
+        </div>
+        <div class="md-bar">
+          <span class="wordmark"><span class="mark"><svg viewBox="0 0 24 24"><circle class="ring" cx="12" cy="12" r="9" stroke-width="2.4"/><circle class="dot" cx="12" cy="12" r="3.4"/></svg></span><span class="w">pamusi<b>ka</b></span></span>
+          <span class="sp"></span>
+          <span class="ic"><i data-i="bell"></i></span>
+          <span class="ic"><i data-i="heart"></i></span>
+        </div>
+        <div class="md-body">
+          <div class="md-eyebrow">Good morning, Tariro</div>
+          <h3>Whatever you need —<br>it’s <em>pamusika.</em></h3>
+          <div class="md-search">
+            <span class="q"><i data-i="search"></i>Search 40,000+ listings</span>
+            <span class="loc"><i data-i="pin"></i>Harare</span>
+          </div>
+          <div class="md-shead"><i data-i="boost"></i>Boosted today<span class="sp"></span><a>See all</a></div>
+          <div class="md-rail">
+            <div class="md-card"><span class="badge badge-boost">Boost</span><div class="img ph"><span class="ph-tag" style="font-size:8px;padding:2px 4px">toyota wish</span></div><div class="cb"><div class="pr">US$ 4&thinsp;500</div><div class="ti">Toyota Wish, 2007</div></div></div>
+            <div class="md-card"><span class="badge badge-boost">Boost</span><div class="img ph"><span class="ph-tag" style="font-size:8px;padding:2px 4px">iphone 13</span></div><div class="cb"><div class="pr">US$ 380</div><div class="ti">iPhone 13, clean</div></div></div>
+          </div>
+          <div class="md-shead" style="color:var(--text)">Browse categories</div>
+          <div class="md-cats">
+            <div class="md-cat"><span class="cc"><i data-i="car"></i></span><span>Vehicles</span></div>
+            <div class="md-cat"><span class="cc"><i data-i="home"></i></span><span>Property</span></div>
+            <div class="md-cat"><span class="cc"><i data-i="phoneframe"></i></span><span>Phones</span></div>
+            <div class="md-cat more"><span class="cc"><i data-i="grid"></i></span><span>All 17</span></div>
+          </div>
+        </div>
+        <div class="md-fade"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-title"><h2>Mobile screens</h2><span>375 × 812 · dark &amp; light</span></div>
+  <div class="screens" id="screens"></div>
+
+  <div class="sec-title"><h2>System &amp; desktop</h2><span>the foundations</span></div>
+  <div class="big-links">
+    <a class="blink ds" href="design/index.html">
+      <span class="ic"><i data-i="grid"></i></span>
+      <div><h3>Design system</h3><p>Logo, colour, type, components &amp; microcopy.</p></div>
+      <span class="go"><i data-i="arrowright"></i></span>
+    </a>
+    <a class="blink web" href="screens/desktop.html">
+      <span class="ic"><i data-i="desktop"></i></span>
+      <div><h3>Desktop web</h3><p>Home, Vehicles &amp; Listing — responsive.</p></div>
+      <span class="go"><i data-i="arrowright"></i></span>
+    </a>
+  </div>
+
+  <div class="hub-foot">Pamusika · pa·mu·SEE·ka · a place at the market</div>
+</div>
+
+<script src="design/icons.js"></script>
+<script src="design/shell.js"></script>
+<script>
+  const S = [
+    ['home','Home','hero · boosted · grid','t-home'],
+    ['vehicles','Vehicles','filter · grid · boost','t-veh'],
+    ['listing','Listing','photos · message','t-lst'],
+    ['shop','Shop','banner · bio · grid','t-shop'],
+    ['sell','Sell wizard','5 steps · publish','t-sell'],
+    ['messages','Messages','list · thread','t-msg'],
+    ['signup','Sign-up','phone · OTP','t-sign'],
+  ];
+  const T = {
+    'home':'<div style="height:16%;background:var(--surface-2)"></div><div style="flex:1;padding:9px;display:flex;flex-direction:column;gap:7px"><div style="height:30%;background:var(--gold-soft);border-radius:6px"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;flex:1"><div style="background:var(--surface-2);border-radius:6px"></div><div style="background:var(--surface-2);border-radius:6px"></div><div style="background:var(--surface-2);border-radius:6px"></div><div style="background:var(--surface-2);border-radius:6px"></div></div></div>',
+    'vehicles':'<div style="height:13%;background:var(--surface-2)"></div><div style="padding:9px;display:flex;gap:5px"><div style="height:18px;width:42px;background:var(--green);border-radius:99px"></div><div style="height:18px;width:30px;background:var(--surface-2);border-radius:99px"></div></div><div style="flex:1;padding:0 9px 9px;display:grid;grid-template-columns:1fr 1fr;gap:6px"><div style="background:var(--surface-2);border-radius:6px"></div><div style="background:var(--surface-2);border-radius:6px"></div><div style="background:var(--surface-2);border-radius:6px"></div><div style="background:var(--surface-2);border-radius:6px"></div></div>',
+    'listing':'<div style="height:46%;background:var(--ph-a)"></div><div style="padding:10px;display:flex;flex-direction:column;gap:6px;flex:1"><div style="height:16px;width:55%;background:var(--green-soft);border-radius:4px"></div><div style="height:10px;width:80%;background:var(--surface-2);border-radius:4px"></div><div style="margin-top:auto;height:30px;background:var(--green);border-radius:8px"></div></div>',
+    'shop':'<div style="height:22%;background:var(--surface-3)"></div><div style="padding:9px;margin-top:-16px;flex:1"><div style="width:30px;height:30px;border-radius:9px;background:var(--gold);border:2px solid var(--bg)"></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-top:9px"><div style="aspect-ratio:1;background:var(--surface-2);border-radius:5px"></div><div style="aspect-ratio:1;background:var(--surface-2);border-radius:5px"></div><div style="aspect-ratio:1;background:var(--surface-2);border-radius:5px"></div></div></div>',
+    'sell':'<div style="height:13%;background:var(--surface-2)"></div><div style="padding:10px;display:flex;flex-direction:column;gap:9px;flex:1"><div style="display:flex;gap:4px"><div style="flex:1;height:4px;background:var(--green);border-radius:9px"></div><div style="flex:1;height:4px;background:var(--green);border-radius:9px"></div><div style="flex:1;height:4px;background:var(--surface-3);border-radius:9px"></div></div><div style="height:30px;background:var(--surface-2);border-radius:7px"></div><div style="height:30px;background:var(--surface-2);border-radius:7px"></div><div style="margin-top:auto;height:30px;background:var(--green);border-radius:8px"></div></div>',
+    'messages':'<div style="height:13%;background:var(--surface-2)"></div><div style="flex:1;padding:10px;display:flex;flex-direction:column;gap:10px"><div style="display:flex;gap:7px;align-items:center"><div style="width:26px;height:26px;border-radius:50%;background:var(--surface-3)"></div><div style="flex:1;height:9px;background:var(--surface-2);border-radius:4px"></div></div><div style="display:flex;gap:7px;align-items:center"><div style="width:26px;height:26px;border-radius:50%;background:var(--surface-3)"></div><div style="flex:1;height:9px;background:var(--surface-2);border-radius:4px"></div></div><div style="display:flex;gap:7px;align-items:center"><div style="width:26px;height:26px;border-radius:50%;background:var(--surface-3)"></div><div style="flex:1;height:9px;background:var(--surface-2);border-radius:4px"></div></div></div>',
+    'signup':'<div style="flex:1;padding:16px;display:flex;flex-direction:column;justify-content:center;gap:11px"><div style="width:32px;height:32px;border-radius:50%;border:3px solid var(--green);margin-bottom:6px"></div><div style="height:15px;width:70%;background:var(--surface-2);border-radius:4px"></div><div style="height:36px;background:var(--surface-2);border-radius:8px;margin-top:8px"></div><div style="height:36px;background:var(--green);border-radius:8px"></div></div>',
+  };
+  document.getElementById('screens').innerHTML = S.map((s,i)=>`
+    <a class="scard" href="screens/${s[0]}.html">
+      <span class="thumb">${T[s[0]]}</span>
+      <span class="cap"><b><span class="num">0${i+1}</span> ${s[1]}</b><p>${s[2]}</p></span>
+    </a>`).join('');
+  if(window.PamIcons) window.PamIcons.render();
+</script>
+</body>
+</html>
