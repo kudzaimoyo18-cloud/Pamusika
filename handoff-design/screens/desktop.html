@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -25,7 +25,7 @@
   .nav-icon { width: 44px; height: 44px; border-radius: var(--r-sm); display: grid; place-items: center; color: var(--text); position: relative; }
   .nav-icon i { width: 22px; } .nav-icon.has-dot::after { content:""; position:absolute; top:9px; right:10px; width:8px; height:8px; border-radius:50%; background:var(--green); border:2px solid var(--bg); }
   .nav-ava { width: 40px; height: 40px; border-radius: 50%; background: var(--gold-soft); color: var(--gold);
-    display: grid; place-items: center; font-family: var(--font-serif); font-weight: 600; }
+    display: grid; place-items: center; font-family: var(--font-display); font-weight: 600; }
 
   .view { display: none; } .view.on { display: block; }
   .wrap { padding: 0 32px; }
@@ -40,7 +40,7 @@
   .hero .stat .l { font-size: var(--fs-sm); color: var(--text-dim); }
 
   .row-head { display: flex; align-items: baseline; justify-content: space-between; margin: 34px 0 16px; }
-  .row-head h2 { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 600; display: flex; align-items: center; gap: 9px; white-space: nowrap; }
+  .row-head h2 { font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; display: flex; align-items: center; gap: 9px; white-space: nowrap; }
   .row-head h2 i { width: 19px; color: var(--gold); } .row-head a { color: var(--green); font-weight: 600; font-size: var(--fs-sm); }
 
   .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; }
@@ -67,7 +67,7 @@
   .price-range .input { height: 42px; }
 
   .plp-main .bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
-  .plp-main .bar h1 { font-family: var(--font-serif); font-size: 1.8rem; font-weight: 600; }
+  .plp-main .bar h1 { font-family: var(--font-display); font-size: 1.8rem; font-weight: 600; }
   .plp-main .bar .sub { font-size: var(--fs-sm); color: var(--text-muted); } .plp-main .bar .sub b { font-family: var(--font-mono); color: var(--text); }
   .chips-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
   .plp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
@@ -94,7 +94,7 @@
 
   .buy-panel { position: sticky; top: 84px; background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--r-lg); padding: 24px; }
   .buy-panel .price { font-family: var(--font-mono); font-weight: 700; font-size: 2rem; letter-spacing: -0.02em; }
-  .buy-panel .ti { font-family: var(--font-serif); font-size: 1.4rem; font-weight: 500; margin-top: 8px; line-height: 1.2; }
+  .buy-panel .ti { font-family: var(--font-display); font-size: 1.4rem; font-weight: 500; margin-top: 8px; line-height: 1.2; }
   .buy-panel .meta { display: flex; gap: 14px; margin-top: 12px; font-size: var(--fs-sm); color: var(--text-muted); flex-wrap: wrap; }
   .buy-panel .meta span { display: inline-flex; align-items: center; gap: 5px; } .buy-panel .meta i { width: 14px; color: var(--text-dim); }
   .buy-panel .btn { margin-top: 18px; }

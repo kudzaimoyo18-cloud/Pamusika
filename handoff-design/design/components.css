@@ -17,15 +17,15 @@ i[data-i] svg { width: 100%; height: 100%; }
 .mark.gold .dot { fill: var(--gold); }
 
 .wordmark {
-  font-family: var(--font-serif);
-  font-weight: 500;
-  letter-spacing: -0.02em;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.04em;
   display: inline-flex; align-items: center; gap: 9px;
   color: var(--text);
 }
 .wordmark .mark { width: 1.05em; height: 1.05em; }
 .wordmark .w { line-height: 1; }
-.wordmark .w b { font-weight: 600; }
+.wordmark .w b { font-weight: 800; }
 
 /* ---------- BUTTONS ---------- */
 .btn {
@@ -162,7 +162,7 @@ i[data-i] svg { width: 100%; height: 100%; }
 
 /* ---------- AVATAR / SHOP ---------- */
 .avatar { border-radius: 50%; overflow: hidden; flex: none; background: var(--surface-2);
-  display: grid; place-items: center; font-family: var(--font-serif); font-weight: 600; }
+  display: grid; place-items: center; font-family: var(--font-display); font-weight: 600; }
 .avatar.sq { border-radius: var(--r-sm); }
 .verified { color: var(--green); }
 
@@ -214,7 +214,7 @@ i[data-i] svg { width: 100%; height: 100%; }
 }
 .appbar .wordmark { font-size: 1.4rem; }
 .appbar-spacer { flex: 1; }
-.appbar-title { font-family: var(--font-serif); font-size: var(--fs-h3); font-weight: 600; white-space: nowrap; }
+.appbar-title { font-family: var(--font-display); font-size: var(--fs-h3); font-weight: 600; white-space: nowrap; }
 .iconbtn { width: 42px; height: 42px; border-radius: var(--r-sm); display: grid; place-items: center;
   color: var(--text); background: transparent; position: relative; }
 .iconbtn svg { width: 22px; height: 22px; }
@@ -280,3 +280,15 @@ html[data-review] .stage { align-items: flex-start; }
 html[data-review] .device { height: auto; }
 html[data-review] .app { position: static; }
 html[data-review] .screen { overflow: visible; flex: none; }
+
+
+/* ---------- v2: photos inside .ph placeholders ----------
+   Image overlays the lazy-load stripe pattern. Falls back to
+   stripes + label tag if the image 404s or is slow. */
+.ph img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center;
+  z-index: 1;
+}
+.ph img + .ph-tag { display: none; }

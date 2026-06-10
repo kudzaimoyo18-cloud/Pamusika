@@ -1,25 +1,26 @@
 /* ============================================================
-   PAMUSIKA — Design Tokens
-   "At the market." Dark-mode-first. Green + gold on warm black.
+   PAMUSIKA — Design Tokens (v2)
+   Light-mode default, dark toggle.
+   Inter throughout. Green + gold on warm cream.
    ============================================================ */
 
-/* ---- Fonts (Google) ---- */
-@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+/* ---- Font (Google) — Inter variable + tnum for money ---- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
   /* ---------- TYPE ---------- */
-  --font-serif: 'Newsreader', Georgia, 'Times New Roman', serif;
-  --font-ui: 'Hanken Grotesk', -apple-system, system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+  --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'Inter', ui-monospace, 'SF Mono', monospace;
 
-  --fs-display: clamp(2.6rem, 9vw, 4.2rem);
+  --fs-display: clamp(2.6rem, 9vw, 4.4rem);
   --fs-h1: 2rem;
   --fs-h2: 1.5rem;
   --fs-h3: 1.2rem;
   --fs-lg: 1.0625rem;
-  --fs-base: 0.9375rem;   /* 15px */
-  --fs-sm: 0.8125rem;     /* 13px */
-  --fs-xs: 0.6875rem;     /* 11px */
+  --fs-base: 0.9375rem;
+  --fs-sm: 0.8125rem;
+  --fs-xs: 0.6875rem;
 
   /* ---------- SPACING (4px base) ---------- */
   --s1: 4px;  --s2: 8px;  --s3: 12px; --s4: 16px;
@@ -30,92 +31,102 @@
   --r-xs: 6px;  --r-sm: 10px; --r-md: 14px;
   --r-lg: 20px; --r-xl: 28px; --r-pill: 999px;
 
-  /* ---------- BRAND ACCENTS (constant across modes) ---------- */
-  --green: oklch(0.74 0.165 158);
-  --green-press: oklch(0.66 0.16 158);
-  --green-ink: oklch(0.20 0.05 158);      /* text ON green */
-  --gold: oklch(0.81 0.135 86);
-  --gold-press: oklch(0.74 0.13 86);
-  --gold-ink: oklch(0.26 0.06 86);        /* text ON gold */
-
-  /* ---------- SEMANTIC ---------- */
-  --danger: oklch(0.66 0.19 25);
-  --danger-soft: oklch(0.66 0.19 25 / 0.14);
-  --warning: var(--gold);
-  --success: var(--green);
+  /* ---------- BRAND ACCENTS (calibrated per mode below) ---------- */
+  --danger: oklch(0.58 0.2 25);
+  --warning: oklch(0.66 0.125 82);
+  --success: oklch(0.6 0.15 158);
 
   /* motion */
   --ease: cubic-bezier(.22,.61,.36,1);
 }
 
 /* =========================================================
-   DARK MODE (default)
+   LIGHT MODE (default)
+   Warm cream surface, cool charcoal ink, market-green primary.
    ========================================================= */
 :root,
+[data-theme="light"] {
+  color-scheme: light;
+
+  /* Surfaces — warm, slightly off-white. Reads premium, not sterile. */
+  --bg: oklch(0.985 0.006 88);
+  --bg-elev: oklch(0.995 0.004 88);
+  --surface: oklch(1 0 0);
+  --surface-2: oklch(0.965 0.007 88);
+  --surface-3: oklch(0.93 0.009 88);
+  --border: oklch(0.89 0.008 88);
+  --border-soft: oklch(0.93 0.006 88);
+
+  /* Ink — slightly cool charcoal for contrast against warm surfaces */
+  --text: oklch(0.2 0.012 240);
+  --text-muted: oklch(0.45 0.012 240);
+  --text-dim: oklch(0.62 0.01 240);
+
+  /* Brand — market green + Zim gold */
+  --green: oklch(0.55 0.16 158);
+  --green-press: oklch(0.48 0.155 158);
+  --green-ink: oklch(0.99 0.01 158);
+  --green-soft: oklch(0.55 0.16 158 / 0.1);
+
+  --gold: oklch(0.7 0.135 82);
+  --gold-press: oklch(0.63 0.13 82);
+  --gold-ink: oklch(0.22 0.05 82);
+  --gold-soft: oklch(0.7 0.135 82 / 0.16);
+
+  --danger: oklch(0.58 0.2 25);
+  --danger-soft: oklch(0.58 0.2 25 / 0.1);
+
+  /* Photo placeholder (only used while lazy-loading) */
+  --ph-a: oklch(0.93 0.008 88);
+  --ph-b: oklch(0.89 0.01 88);
+  --ph-label: oklch(0.55 0.01 88);
+
+  --shadow-sm: 0 1px 2px oklch(0.5 0.02 240 / 0.08);
+  --shadow-md: 0 10px 30px -12px oklch(0.4 0.02 240 / 0.18);
+  --shadow-lg: 0 30px 70px -24px oklch(0.4 0.02 240 / 0.24);
+  --scrim: oklch(0.18 0.01 240 / 0.5);
+}
+
+/* =========================================================
+   DARK MODE (toggle)
+   Warm near-black, near-white ink, brighter green for AA contrast.
+   ========================================================= */
 [data-theme="dark"] {
   color-scheme: dark;
-  --bg: oklch(0.165 0.008 162);
-  --bg-elev: oklch(0.185 0.009 162);
-  --surface: oklch(0.205 0.01 162);
-  --surface-2: oklch(0.245 0.011 162);
-  --surface-3: oklch(0.285 0.012 162);
-  --border: oklch(0.32 0.012 162);
-  --border-soft: oklch(0.27 0.011 162);
 
-  --text: oklch(0.965 0.004 162);
-  --text-muted: oklch(0.74 0.009 162);
-  --text-dim: oklch(0.56 0.009 162);
+  --bg: oklch(0.165 0.008 88);
+  --bg-elev: oklch(0.19 0.009 88);
+  --surface: oklch(0.215 0.01 88);
+  --surface-2: oklch(0.255 0.011 88);
+  --surface-3: oklch(0.295 0.012 88);
+  --border: oklch(0.33 0.012 88);
+  --border-soft: oklch(0.28 0.011 88);
 
-  --green-soft: oklch(0.74 0.165 158 / 0.16);
-  --gold-soft: oklch(0.81 0.135 86 / 0.16);
+  --text: oklch(0.97 0.004 88);
+  --text-muted: oklch(0.74 0.009 88);
+  --text-dim: oklch(0.56 0.009 88);
 
-  --ph-a: oklch(0.24 0.012 162);   /* photo placeholder base */
-  --ph-b: oklch(0.27 0.014 162);   /* photo placeholder stripe */
-  --ph-label: oklch(0.62 0.01 162);
+  --green: oklch(0.78 0.165 158);
+  --green-press: oklch(0.7 0.16 158);
+  --green-ink: oklch(0.18 0.05 158);
+  --green-soft: oklch(0.78 0.165 158 / 0.14);
+
+  --gold: oklch(0.83 0.135 86);
+  --gold-press: oklch(0.76 0.13 86);
+  --gold-ink: oklch(0.22 0.05 86);
+  --gold-soft: oklch(0.83 0.135 86 / 0.16);
+
+  --danger: oklch(0.7 0.18 25);
+  --danger-soft: oklch(0.7 0.18 25 / 0.14);
+
+  --ph-a: oklch(0.24 0.012 88);
+  --ph-b: oklch(0.27 0.014 88);
+  --ph-label: oklch(0.62 0.01 88);
 
   --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.4);
   --shadow-md: 0 8px 24px -8px oklch(0 0 0 / 0.55);
   --shadow-lg: 0 24px 60px -20px oklch(0 0 0 / 0.7);
-  --scrim: oklch(0.1 0.005 162 / 0.72);
-}
-
-/* =========================================================
-   LIGHT MODE
-   ========================================================= */
-[data-theme="light"] {
-  color-scheme: light;
-  --bg: oklch(0.975 0.004 150);
-  --bg-elev: oklch(0.995 0.003 150);
-  --surface: oklch(1 0 0);
-  --surface-2: oklch(0.965 0.005 150);
-  --surface-3: oklch(0.94 0.006 150);
-  --border: oklch(0.9 0.006 150);
-  --border-soft: oklch(0.93 0.005 150);
-
-  --text: oklch(0.22 0.012 162);
-  --text-muted: oklch(0.46 0.012 162);
-  --text-dim: oklch(0.6 0.01 162);
-
-  --green: oklch(0.6 0.15 158);
-  --green-press: oklch(0.53 0.145 158);
-  --green-ink: oklch(0.99 0.01 158);
-  --gold: oklch(0.66 0.125 82);
-  --gold-press: oklch(0.59 0.12 82);
-  --gold-ink: oklch(0.99 0.01 82);
-  --danger: oklch(0.58 0.2 25);
-
-  --green-soft: oklch(0.6 0.15 158 / 0.12);
-  --gold-soft: oklch(0.66 0.125 82 / 0.14);
-  --danger-soft: oklch(0.58 0.2 25 / 0.1);
-
-  --ph-a: oklch(0.93 0.006 150);
-  --ph-b: oklch(0.9 0.008 150);
-  --ph-label: oklch(0.55 0.01 150);
-
-  --shadow-sm: 0 1px 2px oklch(0.5 0.02 162 / 0.12);
-  --shadow-md: 0 10px 30px -12px oklch(0.4 0.02 162 / 0.22);
-  --shadow-lg: 0 30px 70px -24px oklch(0.4 0.02 162 / 0.28);
-  --scrim: oklch(0.2 0.01 162 / 0.5);
+  --scrim: oklch(0.1 0.005 88 / 0.72);
 }
 
 /* =========================================================
@@ -134,10 +145,16 @@ body {
   background: var(--bg);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  font-feature-settings: "cv11" 1, "ss01" 1;
 }
 
-h1, h2, h3, h4 { font-family: var(--font-serif); font-weight: 500; line-height: 1.08; letter-spacing: -0.01em; }
-h1 { font-size: var(--fs-h1); }
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+h1 { font-size: var(--fs-h1); letter-spacing: -0.025em; }
 h2 { font-size: var(--fs-h2); }
 h3 { font-size: var(--fs-h3); }
 
@@ -146,12 +163,15 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 img, svg { display: block; max-width: 100%; }
 input, textarea, select { font-family: inherit; font-size: inherit; color: inherit; }
 
-::selection { background: var(--green-soft); }
+::selection { background: var(--green-soft); color: var(--text); }
 
-/* numerals / money / labels */
-.mono { font-family: var(--font-mono); font-feature-settings: "tnum" 1; }
-.serif { font-family: var(--font-serif); }
+/* Money / numbers - tabular nums for clean alignment */
+.mono, .num, .tabular {
+  font-family: var(--font-mono);
+  font-feature-settings: "tnum" 1, "cv11" 1;
+  font-variant-numeric: tabular-nums;
+}
 
-/* scrollbars */
+/* scrollbars hidden in horizontal rails */
 .scroll-x::-webkit-scrollbar, .scroll-y::-webkit-scrollbar { height: 0; width: 0; }
 .scroll-x { scrollbar-width: none; -ms-overflow-style: none; }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -69,7 +69,7 @@
   /* type */
   .type-row { display: flex; align-items: baseline; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--border-soft); flex-wrap: wrap; }
   .type-row .spec { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--text-dim); width: 120px; flex: none; }
-  .scale-display { font-family: var(--font-serif); line-height: 1; }
+  .scale-display { font-family: var(--font-display); line-height: 1; }
 
   /* components demo */
   .demo { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
@@ -82,7 +82,7 @@
   @media (min-width: 720px){ .principles { grid-template-columns: 1fr 1fr; } }
   .prin { display: flex; gap: 16px; padding: 20px; background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--r-md); }
   .prin .n { font-family: var(--font-mono); color: var(--green); font-weight: 700; font-size: var(--fs-sm); flex: none; }
-  .prin h4 { font-family: var(--font-serif); font-size: var(--fs-h3); font-weight: 600; margin-bottom: 5px; }
+  .prin h4 { font-family: var(--font-display); font-size: var(--fs-h3); font-weight: 600; margin-bottom: 5px; }
   .prin p { font-size: var(--fs-sm); color: var(--text-muted); line-height: 1.55; }
 
   .screens-grid { grid-template-columns: repeat(2, 1fr); }
@@ -189,7 +189,7 @@
     <div class="panel">
       <div class="panel-head">SURFACES — dark &amp; light side by side</div>
       <div class="mode-pair">
-        <div data-theme="dark" style="background:var(--bg)">
+        <div data-theme="light" style="background:var(--bg)">
           <div style="font-family:var(--font-mono);font-size:var(--fs-xs);color:var(--text-dim);margin-bottom:14px;">DARK · default</div>
           <div style="display:flex;flex-direction:column;gap:8px;">
             <div style="display:flex;gap:10px;align-items:center;"><span style="width:34px;height:34px;border-radius:8px;background:var(--bg);border:1px solid var(--border)"></span><span style="font-size:var(--fs-sm)">bg</span></div>
